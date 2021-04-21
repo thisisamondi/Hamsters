@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
 	const snapshot = await hamstrarRef.get();
 
 	if (snapshot.empty) {
-		res.sen([])
+		res.send([])
 		return
 	}
 	items = []
@@ -25,11 +25,12 @@ router.get('/', async (req, res) => {
 	snapshot.forEach(doc => {
 		const data = doc.data()
 		data.id = doc.id //ID behövs för POST, PUT, DELETE
-		res.send(data)
+		// res.send(data)
 		items.push(data)
 	})
 	res.status(200).send(items)
 });
+
 
 
 //POST
@@ -55,4 +56,50 @@ router.delete('/', async (req, res) => {
 
 })
 
+
+
+//RANDOM HAMSTER
+router.get('/random', async (req, res) => {
+
+	const hamstrarRef = db.collection('Hamsters');
+	const snapshot = await hamstrarRef.get();
+	if (snapshot.empty) {
+		res.send([])
+		return
+	}
+	items = []
+
+	snapshot.forEach(doc => {
+		const data = doc.data()
+		data.id = doc.id //ID behövs för POST, PUT, DELETE
+		// res.send(data)
+		items.push(data)
+	})
+
+	const randomIndex = Math.floor(Math.random() * items.length)
+	res.status(200).send(items[randomIndex])
+
+})
+
+
+//HAMSTER ID
+router.get('/:id', async (req, res) => {
+
+	const id = req.params.id
+	const docRef = await db.collection('Hamsters').doc(id).get()
+
+	if (!docRef.exists) {
+		res.status(404).send("Hamster does not exist")
+		return
+	}
+
+	const data = docRef.data()
+	// IF SUCCESS
+	res.send(data)
+
+})
+
+
 module.exports = router
+
+

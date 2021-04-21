@@ -3,6 +3,8 @@ const app = express()
 const cors = require('cors');
 const path = require('path');
 const hamstrar = require('./routes/hamstrar.js');
+const staticFolder = path.join(__dirname, 'static')
+
 
 const PORT = 1337
 
@@ -13,7 +15,10 @@ app.use((req, res, next) =>{
 })
 
 app.use (express.json())
-app.use(cors())
+app.use(cors());
+app.use(express.static(staticFolder))
+
+
 //Hämtar root filen(/) så att den kan visas i porten
 //GET registrerar en Route
 app.get('/', (req, res) => {
