@@ -47,17 +47,44 @@ router.post('/', async (req, res) => {
 	}
 	res.status(200).send(docRef.id)
 
+
+	//TODO - KOLLA ATT DET ÄR ETT KORREKT HAMSTEROBJEKT
 })
 //PUT
+router.put('/:id', async (req, res) => {
 
-//DELETE
-router.delete('/', async (req, res) => {
+	const object = req.body
+	const id = req.params.id
 
-	// du måste ha "id"
+	console.log('console log 1', object);
+	console.log('console log 1.2', id);
+
+	if (!object || !id) {
+		console.log('console log 1.5')
+		res.sendStatus(400)
+		return
+	}
+
+	console.log('console log 2');
+
+//Vi kan kontollera om det finns ett doc som matchar id i databasen. Den här koden godkänner id som inte matchar och lägger till ett nytt doc i databasen.
+
 	const docRef = db.collection('Hamsters').doc(id)
-	const result = await docRef.delete()
-
+	await docRef.set(object, {merge: true})
+	res.sendStatus(200)
 })
+
+function isHamsterObject(maybeObject) {
+
+	//Pratigt, men kanske mera lättläst. kan göras mer kompakt
+	if (!maybeObject)
+		return false
+	else if (!maybeObject.name || !maybeObject.age)
+		return false
+
+	return true
+};
+
 
 
 
@@ -66,6 +93,8 @@ router.get('/random', async (req, res) => {
 
 	const hamstrarRef = db.collection('Hamsters');
 	const snapshot = await hamstrarRef.get();
+
+
 	if (snapshot.empty) {
 		res.send([])
 		return
@@ -101,6 +130,22 @@ router.get('/:id', async (req, res) => {
 
 	// IF SUCCESS
 	res.send(data)
+
+})
+
+//DELETE
+router.delete('/:id', async (req, res) => {
+
+	// Du behöver ID
+	const id = req.params.id
+
+	if (!id) {
+		res.sendStatus(400)
+		return
+	}
+
+	await db.collection('Hamsters').doc(id).delete()
+	res.sendStatus(200)
 
 })
 
