@@ -41,8 +41,11 @@ router.post('/', async (req, res) => {
 	const docRef = await db.collection('Hamsters').add(hamster)
 	console.log('The document id is: ' + docRef.id)
 
-	res.send(docRef.id)
-
+	if (!docRef.exists) {
+		res.status(400).send("Ooops. Something went wrong")
+		return
+	}
+	res.status(200).send(docRef.id)
 
 })
 //PUT
@@ -93,7 +96,9 @@ router.get('/:id', async (req, res) => {
 		return
 	}
 
+	// GET data
 	const data = docRef.data()
+
 	// IF SUCCESS
 	res.send(data)
 
