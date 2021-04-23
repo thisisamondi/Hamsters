@@ -32,11 +32,14 @@ router.get('/', async (req, res) => {
 });
 
 
-
 //POST
 router.post('/', async (req, res) => {
 	const hamster = req.body
-
+	
+	if (!hamster) {
+		res.status(200).send("Bad request. Req.body is undefined")
+		return
+	}
 	// utan att ange id
 	const docRef = await db.collection('Hamsters').add(hamster)
 	console.log('The document id is: ' + docRef.id)
