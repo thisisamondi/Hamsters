@@ -7,7 +7,7 @@ const matches = require('./routes/matches.js')
 const staticFolder = path.join(__dirname, 'static')
 
 
-const PORT = 1337
+const PORT = process.env.PORT || 1337
 
 //Middleware
 app.use((req, res, next) =>{
