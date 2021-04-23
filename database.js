@@ -13,5 +13,12 @@ function getDatabase() {
 	return admin.firestore();
 }
 
+
+let privateKey;
+try {
+    privateKey = require('./firebase_key.json')
+} catch {
+    privateKey = JSON.parse(process.env.PRIVATE_KEY)
+}
 //exportera databasen
 module.exports = getDatabase
