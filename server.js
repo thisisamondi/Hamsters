@@ -27,6 +27,19 @@ app.get('/', (req, res) => {
  res.send('Hamsters project')
 })
 
+app.get('/simulate-error', (req, res) =>{
+    let x;
+    
+    try {   
+    x.name = "Hanna"
+    res.send(x.name)
+    } catch (error) {
+        console.log("ett fel inträffade" + error.message)
+        res.status(500).send(error.message);
+    }
+   
+})
+
 //GET hamstrar
 // app.get('/hamstrar', (req,res) => {
 //     console.log('GET hamsters');
