@@ -80,6 +80,7 @@ router.put('/:id', async (req, res) => {
 	res.sendStatus(200)
 })
 
+//check if hamster is an object
 function isHamsterObject(maybeObject) {
 
 	//Pratigt, men kanske mera lättläst. kan göras mer kompakt
@@ -146,7 +147,7 @@ router.delete('/:id', async (req, res) => {
 	const id = req.params.id
 
 	if (!id) {
-		res.sendStatus(400)
+		res.sendStatus(404)
 		return
 	}
 
