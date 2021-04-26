@@ -35,24 +35,27 @@ router.get('/', async (req, res) => {
 //POST
 router.post('/', async (req, res) => {
 	const hamster = req.body
-	
-	if (!hamster) {
-		res.status(200).send("Bad request. Req.body is undefined")
+
+	if (!isHamsterObject(hamster)) {
+		res.status(400).send("Bad request. Req.body is undefined")
+		console.log("console log 1")
 		return
 	}
 	// utan att ange id
 	const docRef = await db.collection('Hamsters').add(hamster)
 	console.log('The document id is: ' + docRef.id)
 
-	if (!docRef.exists) {
-		res.status(400).send("Ooops. Something went wrong")
-		return
-	}
-	res.status(200).send(docRef.id)
+	// if (!docRef.exists) {
+	// 	res.status(400).send("Ooops. Something went wrong")
+	// 	return
+	// }
+	console.log("console log 2")
+	res.status(200).send({id:docRef.id})
 
 
 	//TODO - KOLLA ATT DET ÄR ETT KORREKT HAMSTEROBJEKT
 })
+
 //PUT
 router.put('/:id', async (req, res) => {
 

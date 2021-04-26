@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const cors = require('cors');
 const path = require('path');
-const hamstrar = require('./routes/hamstrar.js');
+const hamsters = require('./routes/hamsters.js');
 const matches = require('./routes/matches.js')
 const staticFolder = path.join(__dirname, 'static')
 
@@ -55,5 +55,5 @@ app.listen(PORT, () => {
 })
 
 //REST API för hamstrar
-app.use('/hamstrar', hamstrar)
+app.use('/hamsters', hamsters)
 app.use('/matches', matches)
