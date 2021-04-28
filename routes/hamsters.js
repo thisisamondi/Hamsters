@@ -10,8 +10,6 @@ const router = express.Router()
 
 //GET
 router.get('/', async (req, res) => {
-	// console.log('/hamstrar REST API');
-	// res.send('/hamstrar REST API');
 
 	const hamstrarRef = db.collection('Hamsters');
 	const snapshot = await hamstrarRef.get();
@@ -34,6 +32,7 @@ router.get('/', async (req, res) => {
 
 //POST
 router.post('/', async (req, res) => {
+	
 	const hamster = req.body
 
 	if (!isHamsterObject(hamster)) {
@@ -41,49 +40,82 @@ router.post('/', async (req, res) => {
 		console.log("console log 1")
 		return
 	}
-	// utan att ange id
+
 	const docRef = await db.collection('Hamsters').add(hamster)
 	console.log('The document id is: ' + docRef.id)
 
-	// if (!docRef.exists) {
-	// 	res.status(400).send("Ooops. Something went wrong")
-	// 	return
-	// }
+
 	console.log("console log 2")
 	res.status(200).send({id:docRef.id})
 
 
-	//TODO - KOLLA ATT DET ÄR ETT KORREKT HAMSTEROBJEKT
 })
 
 //PUT
+
+
+//Pseudocode
+
+
+
+//returnera svar om ID finns
+//returnera svar om ID inte finns
+//Om ID finns skicka statuskod + put
+
+//PUT
+// router.put('/:id', async (req, res) => {
+//     try {
+//         const id = req.params.id
+//         const docRef = await db.collection('Hamsters').doc(id).get()
+//         if ( !id || !docRef.exists ) {
+//             res.status(404).send("The id provided did not match any hamster in our db")
+//             return
+//         }
+//         const object = req.body
+//         if ( Object.entries(object).length === 0 ) {
+//             res.status(400).send("Nothing in body")
+//             return
+//         }
+//         await db.collection('Hamsters').doc(id).update(object)
+//         const message  = "Successfully updated document " + id
+//         res.status(200).send(message)
+	
+//     } catch (e) {
+//         res.status(500).send("Error occuring while updating document")
+//     }
+// })
+
 router.put('/:id', async (req, res) => {
 
+	//req body från insomnia
 	const object = req.body
+	//gör en request med ID
 	const id = req.params.id
-
-	console.log('console log 1', object);
-	console.log('console log 1.2', id);
-
-	if (!object || !id) {
-		console.log('console log 1.5')
-		res.sendStatus(400)
+	
+	const docRef = await db.collection('Hamsters').doc(id).get()
+	
+	//Kolla om ID finns i databasen
+	if (!id || !docRef.exists ) {
+		console.log("console log 1", id )
+		res.status(404).send("ID not found")
 		return
 	}
 
-	console.log('console log 2');
+	//Kolla om objekt inte är ett tomt objekt
+	else if (Object.keys(object).length === 0) {
+		res.status(400).send("Bad request. Cannot send empty body")
+		return
+	}
+	
+	await db.collection('Hamsters').doc(id).set(object, {merge: true})
 
-//Vi kan kontollera om det finns ett doc som matchar id i databasen. Den här koden godkänner id som inte matchar och lägger till ett nytt doc i databasen.
-
-	const docRef = db.collection('Hamsters').doc(id)
-	await docRef.set(object, {merge: true})
 	res.sendStatus(200)
 })
 
-//check if hamster is an object
+
+//Check if hamster is a correct object
 function isHamsterObject(maybeObject) {
 
-	//Pratigt, men kanske mera lättläst. kan göras mer kompakt
 	if (!maybeObject)
 		return false
 	else if (!maybeObject.name || !maybeObject.age)
@@ -145,18 +177,25 @@ router.delete('/:id', async (req, res) => {
 
 	// Du behöver ID
 	const id = req.params.id
+	const docRef = db.collection('Hamsters').doc(id)
 
-	if (!id) {
-		res.sendStatus(404)
+	const doc = await docRef.get();
+
+	if (!doc.exists) {
+		res.status(404).send("Hamsters does not exist")
 		return
 	}
 
-	await db.collection('Hamsters').doc(id).delete()
+	if (!id) {
+		res.sendStatus(400)
+		return
+	}
+	
+	await docRef.delete()	
 	res.sendStatus(200)
 
 })
 
 
 module.exports = router
-
 

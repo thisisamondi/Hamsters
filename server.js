@@ -4,18 +4,19 @@ const cors = require('cors');
 const path = require('path');
 const hamsters = require('./routes/hamsters.js');
 const matches = require('./routes/matches.js')
+
+
+const PORT = process.env.PORT || 1338
 const staticFolder = path.join(__dirname, 'static')
 
 
-const PORT = process.env.PORT || 1337
-
 //Middleware
-app.use((req, res, next) =>{
+app.use((req, res, next) => {
     console.log(`${req.method} ${req.url}`, req.params);
     next()
 })
 
-app.use (express.json())
+app.use(express.json())
 app.use(cors());
 app.use(express.static(staticFolder))
 
@@ -39,14 +40,6 @@ app.get('/simulate-error', (req, res) =>{
     }
    
 })
-
-//GET hamstrar
-// app.get('/hamstrar', (req,res) => {
-//     console.log('GET hamsters');
-//     res.send('Hurraaa du hittade hamstrarna')
-// })
-//dirname är till för att veta var man befinner sig och då visar
-//variabeln var man befinner sig fram till
 
 
 //Startar upp servern
