@@ -53,38 +53,6 @@ router.post('/', async (req, res) => {
 
 //PUT
 
-
-//Pseudocode
-
-
-
-//returnera svar om ID finns
-//returnera svar om ID inte finns
-//Om ID finns skicka statuskod + put
-
-//PUT
-// router.put('/:id', async (req, res) => {
-//     try {
-//         const id = req.params.id
-//         const docRef = await db.collection('Hamsters').doc(id).get()
-//         if ( !id || !docRef.exists ) {
-//             res.status(404).send("The id provided did not match any hamster in our db")
-//             return
-//         }
-//         const object = req.body
-//         if ( Object.entries(object).length === 0 ) {
-//             res.status(400).send("Nothing in body")
-//             return
-//         }
-//         await db.collection('Hamsters').doc(id).update(object)
-//         const message  = "Successfully updated document " + id
-//         res.status(200).send(message)
-	
-//     } catch (e) {
-//         res.status(500).send("Error occuring while updating document")
-//     }
-// })
-
 router.put('/:id', async (req, res) => {
 
 	//req body från insomnia
