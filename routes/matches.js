@@ -44,57 +44,65 @@ router.get('/:id', async (req, res) => {
 	const data = docRef.data()
 
 	// IF SUCCESS
-	res.send(data)
+	res.status(200).send(data)
 
 })
 
 //POST /matches
 router.post('/', async (req, res) => {
-	const match = req.body
+	
+	const matches = req.body
 
-	// utan att ange id
-	const docRef = await db.collection('Matches').add(match)
-	console.log('The document id is: ' + docRef.id)
-
-	if (!docRef.exists) {
-		res.status(400).send("Ooops. Something went wrong")
+	if (!isMatchesObject(matches)) {
+		res.status(400).send("Bad request. Matches is undefined")
 		return
 	}
-	res.status(200).send(docRef.id)
+
+	const docRef = await db.collection('Matches').add(matches)
+	console.log('The document id is: ' + docRef.id)
 
 
-	//TODO - KOLLA ATT DET ÄR ETT KORREKT MATCHOBJEKT
+	res.status(200).send({id:docRef.id})
+
 })
 
-// GET /matches
-// router.get('/:games', async (req, res) => {
-// 	const games = req.params.games
-// 	console.log('hamster games', games);
 
-// 	const docRef = await db.collection('Hamsters').doc(games).get()
+//Check if matches is a correct object
+function isMatchesObject(maybeObject) {
 
-// 	if (!docRef.exists) {
-// 		res.status(404).send("Hamster does not exist")
-// 		return
-// 	}
+	if (!maybeObject)
+		return false
+	else if (!maybeObject.winnerId || !maybeObject.loserId)
+		return false
 
-// 	GET data
-// 	const data = docRef.data()
-
-// 	IF SUCCESS
-// 	res.send(data)
-
-// })
-
-
-
+	return true
+};
 
 
 //DELETE /matches/:id
+router.delete('/:id', async (req, res) => {
+    const id = req.params.id;
+    const docRef = db.collection('Matches').doc(id)
 
-//GET matchwinner/:id
+    const doc = await docRef.get();
 
+  try{
+        if (!doc.exists) {
+        res.status(404).send("Database does not exist")
+        return
+      }
 
+      	if (!id) {
+        res.status(400).send('ID not found')
+        return
+      }
+
+      await docRef.delete()
+      res.sendStatus(200)
+    } catch (err) {
+        res.sendStatus(500).send(err.message)
+    }
+})
 
 
 

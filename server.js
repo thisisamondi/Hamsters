@@ -4,6 +4,9 @@ const cors = require('cors');
 const path = require('path');
 const hamsters = require('./routes/hamsters.js');
 const matches = require('./routes/matches.js')
+const matchWinners = require('./routes/matchWinners.js')
+const winners = require('./routes/winners.js')
+const losers = require('./routes/losers.js')
 
 
 const PORT = process.env.PORT || 1338
@@ -50,3 +53,6 @@ app.listen(PORT, () => {
 //REST API för hamstrar
 app.use('/hamsters', hamsters)
 app.use('/matches', matches)
+app.use('/matchWinners', matchWinners)
+app.use('/losers', losers)
+app.use('/winners', winners)
