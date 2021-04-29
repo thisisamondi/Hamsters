@@ -1,6 +1,4 @@
-//importera databas från database.js
 const getDatabase = require('../database.js')
-//anropa funktionen
 const db = getDatabase();
 
 const express = require('express');
@@ -8,8 +6,6 @@ const router = express.Router()
 
 //GET /matches
 router.get('/', async (req, res) => {
-	// console.log('/hamstrar REST API');
-	// res.send('/hamstrar REST API');
 
 	const matchesRef = db.collection('Matches');
 	const snapshot = await matchesRef.get();
@@ -22,8 +18,7 @@ router.get('/', async (req, res) => {
 
 	snapshot.forEach(doc => {
 		const data = doc.data()
-		data.id = doc.id //ID behövs för POST, PUT, DELETE
-		// res.send(data)
+		data.id = doc.id 
 		items.push(data)
 	})
 	res.status(200).send(items)

@@ -25,23 +25,9 @@ app.use(express.static(staticFolder))
 
 
 //Hämtar root filen(/) så att den kan visas i porten
-//GET registrerar en Route
 app.get('/', (req, res) => {
     console.log('GET /');
  res.send('Hamsters project')
-})
-
-app.get('/simulate-error', (req, res) =>{
-    let x;
-    
-    try {   
-    x.name = "Hanna"
-    res.send(x.name)
-    } catch (error) {
-        console.log("ett fel inträffade" + error.message)
-        res.status(500).send(error.message);
-    }
-   
 })
 
 
@@ -50,7 +36,7 @@ app.listen(PORT, () => {
     console.log('Server is listening on ' +  PORT)
 })
 
-//REST API för hamstrar
+//REST API
 app.use('/hamsters', hamsters)
 app.use('/matches', matches)
 app.use('/matchWinners', matchWinners)

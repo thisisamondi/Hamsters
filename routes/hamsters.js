@@ -1,11 +1,7 @@
-//importera databas från database.js
 const getDatabase = require('../database.js')
-//anropa funktionen
 const db = getDatabase();
-
 const express = require('express');
 const router = express.Router()
-
 
 
 //GET
@@ -22,8 +18,7 @@ router.get('/', async (req, res) => {
 
 	snapshot.forEach(doc => {
 		const data = doc.data()
-		data.id = doc.id //ID behövs för POST, PUT, DELETE
-		// res.send(data)
+		data.id = doc.id
 		items.push(data)
 	})
 	res.status(200).send(items)
@@ -37,44 +32,35 @@ router.post('/', async (req, res) => {
 
 	if (!isHamsterObject(hamster)) {
 		res.status(400).send("Bad request. Req.body is undefined")
-		console.log("console log 1")
 		return
 	}
 
 	const docRef = await db.collection('Hamsters').add(hamster)
 	console.log('The document id is: ' + docRef.id)
 
-
-	console.log("console log 2")
 	res.status(200).send({id:docRef.id})
 
 
 })
 
 //PUT
-
 router.put('/:id', async (req, res) => {
-
-	//req body från insomnia
-	const object = req.body
-	//gör en request med ID
-	const id = req.params.id
 	
+	const object = req.body
+	const id = req.params.id
 	const docRef = await db.collection('Hamsters').doc(id).get()
 	
 	//Kolla om ID finns i databasen
 	if (!id || !docRef.exists ) {
-		console.log("console log 1", id )
 		res.status(404).send("ID not found")
 		return
 	}
-
 	//Kolla om objekt inte är ett tomt objekt
 	else if (Object.keys(object).length === 0) {
 		res.status(400).send("Bad request. Cannot send empty body")
 		return
 	}
-	
+
 	await db.collection('Hamsters').doc(id).set(object, {merge: true})
 
 	res.sendStatus(200)
@@ -110,8 +96,7 @@ router.get('/random', async (req, res) => {
 
 	snapshot.forEach(doc => {
 		const data = doc.data()
-		data.id = doc.id //ID behövs för POST, PUT, DELETE
-		// res.send(data)
+		data.id = doc.id 
 		items.push(data)
 	})
 
@@ -143,19 +128,18 @@ router.get('/:id', async (req, res) => {
 //DELETE
 router.delete('/:id', async (req, res) => {
 
-	// Du behöver ID
 	const id = req.params.id
 	const docRef = db.collection('Hamsters').doc(id)
 
 	const doc = await docRef.get();
 
 	if (!doc.exists) {
-		res.status(404).send("Hamsters does not exist")
+		res.status(404).send("Hamsters does not exist.")
 		return
 	}
 
 	if (!id) {
-		res.sendStatus(400)
+		res.status(400).send ("ID doesn not exist.")
 		return
 	}
 	

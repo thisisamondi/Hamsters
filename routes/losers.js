@@ -1,6 +1,4 @@
-//importera databas från database.js
 const getDatabase = require('../database.js')
-//anropa funktionen
 const db = getDatabase();
 
 const express = require('express');
@@ -14,7 +12,7 @@ router.get('/', async (req, res) => {
 	console.log('console log 1', snapshot)
 	
 	if (snapshot.empty) {
-		res.sendStatus(404)
+		res.status(404).send("Hamsters not found.")
 		return
 	}
 
@@ -22,15 +20,11 @@ router.get('/', async (req, res) => {
 
 	snapshot.forEach(doc => {
 		const data = doc.data()
-		data.id = doc.id //ID behövs för POST, PUT, DELETE
-		// res.send(data)
+		data.id = doc.id
 		items.push(data)
 	})
 	res.status(200).send(items)
 });
-
-
-
 
 
 module.exports = router

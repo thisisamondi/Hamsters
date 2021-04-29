@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
 	const snapshot = await winnersRef.orderBy('wins', 'desc').limit(5).get();
 	
 	if (snapshot.empty) {
-		res.sendStatus(404)
+		res.status(404).send("Hamsters not found.")
 		return
 	}
 
@@ -24,7 +24,6 @@ router.get('/', async (req, res) => {
 	})
 	res.status(200).send(items)
 });
-
 
 
 
