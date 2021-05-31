@@ -17,8 +17,16 @@ Tools used:
 - Heroku
 - Vs Code
 
-* I also used Heroku to publish and operate the app. 
+* I also used Heroku to publish and operate the backend-app. 
   Link: https://hamstrar.herokuapp.com/
+  - endpoints:
+  /hamsters (An array with all the hamster objects)
+  /hamsters/random (A randomly selected hamster object)
+  /hamsters/:id (A hamster object with a specific id)
+
+  /matches (An array with all match objects)
+  /winners (An array with hamsterobjects for the 5 hamsters that have won the most games)
+  /losers  (An array with hamsterobjects for the 5 hamsters that have lost the most games)
 
 
 
